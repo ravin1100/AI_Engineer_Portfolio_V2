@@ -10,18 +10,19 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build Next.js project
-        run: npm run build && npm run export
+      - name: Build Next.js project (static export)
+        run: npm run build
+        # ✅ "out" folder will be generated automatically because you set output: "export" in next.config.js
 
       - name: Deploy to ravin1100.github.io
         run: |
@@ -31,4 +32,5 @@ jobs:
           git config user.email "actions@github.com"
           git add .
           git commit -m "Deploy new portfolio"
+          git branch -M main
           git push --force https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/ravin1100/ravin1100.github.io.git main
